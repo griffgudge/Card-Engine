@@ -2,6 +2,7 @@ import random
 from cards import *
 
 class CardEngine:
+    """Allows the creation of a deck. Able to customize whether cards are removed from the deck, the cards in the deck, the sets in the deck and the names of the sets."""
     def make_deck():
         deck = []
         for i in range(0, 4):
@@ -16,6 +17,7 @@ class CardEngine:
         self.set_names = set_names
 
     def card_picker(self):
+        """Picks a card out of the deck in a (set, number) format."""
         length = len(self.deck)
         if length == 0:
             return True
@@ -27,6 +29,8 @@ class CardEngine:
             return card
 
     def card_reader(self, card=None):
+        """Reads the card and returns its name (e.g (0, 1) returns an Ace), graphic, set name, value and set number.
+        You can insert you own card for it to read but the default will draw a card for you."""
         if card is None:
             card = self.card_picker()
         if card != True:
@@ -48,17 +52,37 @@ class CardEngine:
             return False
 
     def graphic(self, card):
+        """Takes the card in the (set, number) format and returns its graphic only."""
         set, value = card
         graphic = self.sets[set].get(value)
         return graphic
 
+    def hand_printer(self, hand):
+        """Takes a group of cards (e.g hand = [(0, 1), (1, 5)]) and prints them out side by side."""
+        cards = []
+        for card in hand:
+            cards.append((self.graphic(card).split("\n")))        
+        length = len(cards)
+        for rows in range(9):
+            row = []
+            for card in cards:
+                row.append(card[rows])
+                row.append("    ")
+            print(*row)    
+
     def print_card(self, auto_print=False, values=None):
+        """Prints the cards graphic, describes its set and name and returns its value and set number."""
         if values is None:
             values = self.card_reader()
-        if auto_print == True:
+        if auto_print == True and values != False:
             print(values[0])
-            print("You drew a {} of {}!".format(values[1], values[2]))
+            if values[1] == "8" or values[1] == "Ace":
+                n = "n "
+            else:
+                n = " "
+            print("You drew a{}{} of {}!".format(n, values[1], values[2]))
             value, set = values[-2:]
             return value, set
         else:
             print("Out of Cards!")
+            return False
