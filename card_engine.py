@@ -68,7 +68,7 @@ class CardEngine:
             for card in cards:
                 row.append(card[rows])
                 row.append("    ")
-            print(*row)    
+            print(*row)   
 
     def print_card(self, auto_print=False, values=None):
         """Prints the cards graphic, describes its set and name and returns its value and set number."""
